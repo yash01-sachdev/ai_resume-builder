@@ -40,8 +40,11 @@ const updateExperience = (index, field, value)=>{
     try {
         const { data } = await api.post('api/ai/enhance-job-desc', {userContent: prompt}, { headers: { Authorization: token } })
         updateExperience(index, "description", data.enhancedContent)
+        if (data.warning) {
+            toast.success(data.warning)
+        }
     } catch (error) {
-        toast.error(error.message)
+        toast.error(error?.response?.data?.message || error.message)
     }finally{
         setGeneratingIndex(-1)
     }
